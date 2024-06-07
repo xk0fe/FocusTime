@@ -8,8 +8,8 @@ public class MainController
     public event Action<int> OnLevelUpdated;
     public event Action<TimeSpan> OnTimeUpdated;
 
-    private Timer _timer;
-    private Player _player;
+    private readonly Timer _timer;
+    private readonly Player _player;
 
     public bool IsRunning => _timer.IsRunning;
 
@@ -32,7 +32,6 @@ public class MainController
     public void Reset()
     {
         _timer.Reset();
-        OnExperienceUpdated?.Invoke(0);
     }
 
     public void HardReset()
