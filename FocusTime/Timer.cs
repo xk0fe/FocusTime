@@ -7,7 +7,7 @@ public class Timer
     public TimeSpan Elapsed { get; private set; }
     public TimeSpan TickDelta { get; private set; }
     public bool IsRunning { get; private set; }
-    private DispatcherTimer _timer;
+    private readonly DispatcherTimer _timer;
     private DateTime _lastTickTime;
 
     public Timer()
@@ -44,11 +44,6 @@ public class Timer
     {
         IsRunning = false;
         _timer.Stop();
-    }
-
-    public void Pause()
-    {
-        
     }
 
     public void Reset()
