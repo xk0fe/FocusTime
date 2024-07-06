@@ -1,6 +1,6 @@
 ﻿using FontAwesome6;
 
-namespace FocusTime.Configuration;
+namespace FocusTime.Constants;
 
 public static class GraphicConstants
 {

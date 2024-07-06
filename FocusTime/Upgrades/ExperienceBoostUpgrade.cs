@@ -1,4 +1,6 @@
-﻿namespace FocusTime.Upgrades;
+﻿using FocusTime.Models;
+
+namespace FocusTime.Upgrades;
 
 /// <summary>
 /// Experience boost is calculated based on PERCENTAGE from player's TARGET EXPERIENCE
@@ -18,12 +20,12 @@ public class ExperienceBoostUpgrade : Upgrade
         _percentage = _percentage;
     }
 
-    public override void OnActivate(Player player)
+    public override void OnActivate(PlayerModel playerModel)
     {
     }
 
-    public override void Update(Player player)
+    public override void Update(PlayerModel playerModel)
     {
-        player.AddExperience(player.TargetExperience * _percentage);
+        playerModel.AddExperience(playerModel.TargetExperience * _percentage);
     }
 }

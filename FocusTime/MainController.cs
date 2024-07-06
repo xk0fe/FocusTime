@@ -1,4 +1,7 @@
-﻿using FocusTime.Configuration;
+﻿using FocusTime.Models;
+using FocusTime.Models.JSON;
+using FocusTime.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FocusTime;
 
@@ -8,46 +11,49 @@ public class MainController
     public event Action<int> OnLevelUpdated;
     public event Action<TimeSpan> OnTimeUpdated;
 
-    private readonly Timer _timer;
-    private readonly Player _player;
+    private readonly TimerService _timerService;
+    private readonly PlayerModel _playerModel;
 
-    public bool IsRunning => _timer.IsRunning;
+    public bool IsRunning => _timerService.TimerModel.IsRunning;
 
-    public MainController()
+    public MainController(IServiceProvider serviceProvider)
     {
-        _timer = new Timer().CallOnTick(TimerOnTick).SetInterval(GameplaySettings.TIMER_INTERVAL_SECONDS);
-        _player = new Player(GameplaySettings.DEFAULT_PLAYER_LEVEL, TimeSpan.Zero, GameplaySettings.PLAYER_TARGET_EXPERIENCE);
+        var setings = serviceProvider.GetRequiredService<JsonGameplaySettings>();
+        
+        _timerService = new TimerService().CallOnTick(TimerOnTick).SetInterval(setings.TimerIntervalSeconds);
+        _playerModel = new PlayerModel(setings.DefaultPlayerLevel, TimeSpan.Zero, setings.PlayerTargetExperience, setings.PlayerTargetExperienceProgression);
     }
 
     public void Start()
     {
-        _timer.Start();
+        _timerService.Start();
     }
 
     public void Pause()
     {
-        _timer.Stop();
+        _timerService.Stop();
     }
 
     public void Reset()
     {
-        _timer.Reset();
+        _timerService.Reset();
     }
 
     public void HardReset()
     {
-        _timer.Stop();
-        _player.Reset();
-        OnLevelUpdated?.Invoke(_player.Level);
+        _timerService.Stop();
+        _playerModel.Reset();
+        OnLevelUpdated?.Invoke(_playerModel.Level);
         OnExperienceUpdated?.Invoke(0);
         Reset();
     }
 
-    private void TimerOnTick(object sender, EventArgs e)
+    private void TimerOnTick(object? sender, EventArgs e)
     {
-        _player.AddExperience(_timer.TickDelta);
-        OnTimeUpdated?.Invoke(_timer.Elapsed);
-        OnExperienceUpdated?.Invoke(_player.Experience.TotalSeconds / _player.TargetExperience.TotalSeconds);
-        OnLevelUpdated?.Invoke(_player.Level);
+        var timerModel = _timerService.TimerModel;
+        _playerModel.AddExperience(timerModel.TickDelta);
+        OnTimeUpdated?.Invoke(timerModel.Elapsed);
+        OnExperienceUpdated?.Invoke(_playerModel.Experience.TotalSeconds / _playerModel.TargetExperience.TotalSeconds);
+        OnLevelUpdated?.Invoke(_playerModel.Level);
     }
 }

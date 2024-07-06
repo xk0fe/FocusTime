@@ -1,9 +1,9 @@
-﻿using FocusTime.Configuration;
+﻿using FocusTime.Constants;
 using FocusTime.Upgrades;
 
-namespace FocusTime;
+namespace FocusTime.Models;
 
-public class Player
+public class PlayerModel
 {
     public int Level { get; private set; }
 
@@ -11,12 +11,14 @@ public class Player
     public TimeSpan TargetExperience { get; private set; }
 
     private readonly List<Upgrade> _upgrades = new();
+    private readonly Dictionary<int, TimeSpan> _progression;
 
-    public Player(int level, TimeSpan experience, TimeSpan targetExperience)
+    public PlayerModel(int level, TimeSpan experience, TimeSpan targetExperience, Dictionary<int, TimeSpan> progression)
     {
         Level = level;
         Experience = experience;
         TargetExperience = targetExperience;
+        _progression = progression;
     }
 
     private void LevelUp()
@@ -24,11 +26,10 @@ public class Player
         Level++;
         Experience -= TargetExperience;
 
-        var progression = GameplaySettings.PLAYER_TARGET_EXPERIENCE_PROGRESSION;
-        var progressionCount = progression.Count;
+        var progressionCount = _progression.Count;
         if (progressionCount > 0)
         {
-            TargetExperience += progression[Level % progressionCount];
+            TargetExperience += _progression[Level % progressionCount];
         }
     }
 
@@ -37,7 +38,7 @@ public class Player
         Experience += experience;
         
         var levelProgress = Experience.TotalSeconds / TargetExperience.TotalSeconds;
-        if (levelProgress >= GameplaySettings.PROGRESS_BAR_MAXIMUM)
+        if (levelProgress >= PlayerConstants.PROGRESS_BAR_MAXIMUM)
         {
             LevelUp();
         }

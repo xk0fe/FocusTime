@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using FocusTime.Configuration;
+using FocusTime.Constants;
 
 namespace FocusTime;
 

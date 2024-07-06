@@ -1,4 +1,6 @@
-﻿namespace FocusTime.Upgrades;
+﻿using FocusTime.Models;
+
+namespace FocusTime.Upgrades;
 
 public abstract class Upgrade
 {
@@ -11,7 +13,7 @@ public abstract class Upgrade
         Id = id;
     }
 
-    public abstract void OnActivate(Player player);
+    public abstract void OnActivate(PlayerModel playerModel);
     
-    public abstract void Update(Player player);
+    public abstract void Update(PlayerModel playerModel);
 }

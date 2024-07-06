@@ -1,0 +1,13 @@
+﻿{
+  "GameplaySettings": {
+    "TimerIntervalSeconds": 0.035,
+    "ProgressBarMaximum": 1.0,
+    "DefaultPlayerLevel": 0,
+    "PlayerTargetExperience": "00:00:05",
+    "PlayerTargetExperienceProgression": {
+      "0": "00:05:00",
+      "1": "00:10:00",
+      "2": "00:15:00"
+    }
+  }
+}

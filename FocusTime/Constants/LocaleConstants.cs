@@ -1,4 +1,4 @@
-﻿namespace FocusTime.Configuration;
+﻿namespace FocusTime.Constants;
 
 public static class LocaleConstants
 {
